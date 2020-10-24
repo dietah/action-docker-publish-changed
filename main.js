@@ -69,7 +69,7 @@ async function main() {
 
     // Setup buildx
     core.startGroup('==> Prepare buildx');
-    await exec.exec('docker', ['run', '--privileged', 'docker/binfmt:66f9012c56a8316f9244ffd7622d7c21c1f6f28d']);
+    await exec.exec('docker', ['run', '--privileged', 'linuxkit/binfmt:v0.8']);
     await exec.exec('docker', ['buildx', 'create', '--use', '--name', 'builder']);
     await exec.exec('docker', ['buildx', 'inspect', '--bootstrap', 'builder']);
     core.endGroup();
@@ -80,7 +80,7 @@ async function main() {
       const image = dirAndImage[1];
 
       console.log(tags);
-      const tagString = tags.split(',').map(tag => `--tag ${username ? username : github.context.actor}/${image}:${tag}`).join(' ');
+      const tagString = tags.split(',').map(tag => `${username ? username : github.context.actor}/${image}:${tag}`).join(' ');
       console.log(tagString);
 
       core.startGroup(`==> Build '${image}' image`);
@@ -89,7 +89,7 @@ async function main() {
         'build',
         ... (username && password) ? ['--push'] : [],
         '--platform', platforms,
-        tagString,
+        '-t', tagString,
         dir
       ])
       core.endGroup();
