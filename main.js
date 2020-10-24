@@ -63,7 +63,7 @@ async function main() {
     // Login to registry if desired
     if (username && password) {
       core.startGroup('==> Login to DockerHub');
-      await exec.exec(` echo "${password}" | docker login -u ${username} --password-stdin`);
+      await exec.exec(`echo "${password}" | docker login -u ${username} --password-stdin`);
       core.endGroup();
     }
 
@@ -80,7 +80,7 @@ async function main() {
       const image = dirAndImage[1];
 
       console.log(tags);
-      const tagString = tags.split(',').map(tag => `-t ${username ? username : github.context.actor}/${image}:${tag}`).join(' ');
+      const tagString = tags.split(',').map(tag => `--tag ${username ? username : github.context.actor}/${image}:${tag}`).join(' ');
       console.log(tagString);
 
       core.startGroup(`==> Build '${image}' image`);
