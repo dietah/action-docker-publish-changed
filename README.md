@@ -17,5 +17,5 @@ Uses [`buildx`](https://github.com/docker/buildx) under the hood for building mu
     username: ${{secrets.USER}}
     password: ${{secrets.PASS}}
     platforms: linux/amd64,linux/arm64,linux/arm
-    tag: latest
+    tags: latest,1.0.0
 ```
