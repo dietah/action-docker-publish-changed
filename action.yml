@@ -19,8 +19,8 @@ inputs:
     description: Platforms for which the image will be built (comma separated)
     required: false
     default: linux/amd64
-  tag:
-    description: Image tag
+  tags:
+    description: Image tags (comma separated)
     required: false
     default: latest
 runs:

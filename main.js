@@ -10,7 +10,6 @@ async function main() {
     const username = core.getInput('username');
     const password = core.getInput('password');
     const platforms = core.getInput('platforms', { required: true });
-    // const tag = core.getInput('tag', { required: true });
     const tags = core.getInput('tags') || 'latest';
 
     const client = github.getOctokit(token);
@@ -64,7 +63,7 @@ async function main() {
     // Login to registry if desired
     if (username && password) {
       core.startGroup('==> Login to DockerHub');
-      await exec.exec('docker', ['login', '-u', username, '-p', password]);
+      await exec.exec(` echo "${password}" | docker login -u ${username} --password-stdin`);
       core.endGroup();
     }
 
@@ -80,7 +79,9 @@ async function main() {
       const dir = dirAndImage[0];
       const image = dirAndImage[1];
 
+      console.log(tags);
       const tagString = tags.split(',').map(tag => `-t ${username ? username : github.context.actor}/${image}:${tag}`).join(' ');
+      console.log(tagString);
 
       core.startGroup(`==> Build '${image}' image`);
       await exec.exec('docker', [
